@@ -178,7 +178,7 @@ func RunBot(c chan *[]payments.L) {
 				} else {
 					if update.Message.Photo != nil {
 
-						if user, err := db.Adapter.GetUser(update.Message.Chat.ID); err != nil {
+						/*if user, err := db.Adapter.GetUser(update.Message.Chat.ID); err != nil {
 							slog.Error("error getting user", "error", err)
 							if _, err := bot.Send(tgbotapi.NewMessage(update.Message.Chat.ID, "We were unable to process your order. Please retry or reach out to support")); err != nil {
 								slog.Error("error sending message", "error", err)
@@ -189,7 +189,8 @@ func RunBot(c chan *[]payments.L) {
 							go searchTaobao(bot, &update)
 						} else {
 							go search1688(bot, &update)
-						}
+						}*/
+						go searchTaobao(bot, &update)
 
 					} else {
 						switch strings.Split(update.Message.Text, " ")[0] {
