@@ -12,7 +12,7 @@ func sendHelpMessage(bot *tgbotapi.BotAPI, chatID int64) {
 	
 	/help - Display this help message
 	/wallet - Upload an image to add it to your wallet
-	/search_product <query> - Search for products on Taobao.com`
+	/search_product <query> - Search for products`
 
 	msg := tgbotapi.NewMessage(chatID, helpText)
 
@@ -27,7 +27,7 @@ func sendUnknownCommandMessage(bot *tgbotapi.BotAPI, chatID int64) {
 	/start - Start interacting with the bot
 	/help - Display this help message
 	/wallet - Upload an image to add it to your wallet
-	/search_product <query> - Search for products on Taobao.com`
+	/search_product <query> - Search for products`
 
 	msg := tgbotapi.NewMessage(chatID, unknownCommandText)
 
