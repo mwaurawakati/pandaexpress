@@ -17,6 +17,24 @@ const routes: Array<RouteRecordRaw> = [
       import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
   },
   {
+    path: "/cart",
+    name: "cart",
+    component: () =>
+      import(/* webpackChunkName: "cart" */ "../views/CartComponent.vue"),
+  },
+  {
+    path: "/account",
+    name: "account",
+    component: () =>
+      import(/* webpackChunkName: "account" */ "../views/AccountComponent.vue"),
+  },
+  {
+    path: "/settings",
+    name: "settings",
+    component: () =>
+      import(/* webpackChunkName: "settings" */ "../views/SettingsPage.vue"),
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "NotFound",
     component: () => import("@/views/NotFound.vue"),

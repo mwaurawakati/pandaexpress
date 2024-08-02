@@ -27,4 +27,16 @@ nav {
     }
   }
 }
+body,
+html {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.active {
+  background-color: #42b983;
+}
 </style>
