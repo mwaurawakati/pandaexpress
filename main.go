@@ -45,7 +45,7 @@ func main() {
 	eventsChannel := make(chan *[]payments.L)
 	// listen to transaction
 	go payments.Listen(eventsChannel)
-	go telegram_bot.RunBot(eventsChannel)
+	//go telegram_bot.RunBot(eventsChannel)
 	srv := &http.Server{
 		Addr:        ":8080",
 		Handler:     router(),
@@ -73,6 +73,16 @@ func router() http.Handler {
 	mux.HandleFunc("/api/v1/greeting", greetingAPI)
 	mux.HandleFunc("/api/v1/url", handler)
 	mux.HandleFunc("/api/v1/set-url", handleSetUrl)
+	mux.HandleFunc("/api/v1/userinfo", userInfoHandler)
+	mux.HandleFunc("/api/v1/continents", continentsHandler)
+	mux.HandleFunc("/api/v1/countries", getCountriesByContinent)
+	mux.HandleFunc("/api/v1/cities", getCitiesByCountry)
+	mux.HandleFunc("/api/v1/submitShippingAddress", submitShippingAddress)
+	mux.HandleFunc("/api/v1/language", SetPreferredLanguageHandler)
+	mux.HandleFunc("/api/v1/user", getUserHandler)
+	mux.HandleFunc("/api/v1/wallet", getWalletHandler)
+	mux.HandleFunc("/api/v1/transactions", getTransactionsHandler)
+	mux.HandleFunc("/api/v1/orders", getOrdersHandler)
 	return mux
 }
 
@@ -94,20 +104,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Image search url is: %s",telegram_bot.ServiceURL )
 }
 
-func getCloudRunURL(service, revision string) string {
-	if service == "" {
-		service = "default"
-	}
-	if revision == "" {
-		revision = "default"
-	}
-
-	// Construct the Cloud Run URL
-	region := "africa-south1" // Replace with your Cloud Run region
-	//projectID := "PROJECT_ID" // Replace with your Google Cloud Project ID
-
-	return fmt.Sprintf("https://%s-%s-%s.a.run.app", service, revision, region)
-}
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		w.WriteHeader(http.StatusMethodNotAllowed)

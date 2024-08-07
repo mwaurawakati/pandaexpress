@@ -48,7 +48,7 @@ func sendSetEmail(bot *tgbotapi.BotAPI, message tgbotapi.Message) {
 		}
 		return
 	}
-	user.Email = message.Text
+	user.ShippingDetails.Email = message.Text
 	// Extract the selected language from the command
 	if err := db.Adapter.UpdateUser(message.From.ID, *user); err != nil {
 		msg := tgbotapi.NewMessage(message.From.ID, "We experienced an issue updating email. Please contact customer support.")
@@ -88,7 +88,7 @@ func sendSetPhone(bot *tgbotapi.BotAPI, message tgbotapi.Message) {
 		}
 		return
 	}
-	user.Phone = message.Text
+	user.ShippingDetails.Phone = message.Text
 	// Extract the selected language from the command
 	if err := db.Adapter.UpdateUser(message.From.ID, *user); err != nil {
 		msg := tgbotapi.NewMessage(message.From.ID, "We experienced an issue updating email. Please contact customer support.")
@@ -119,7 +119,7 @@ func sendSetAddress(bot *tgbotapi.BotAPI, message tgbotapi.Message) {
 		return
 	}
 
-	user.Addresses = append(user.Addresses, message.Text)
+	user.ShippingDetails.Addresses = append(user.ShippingDetails.Addresses, message.Text)
 	// Extract the selected language from the command
 	if err := db.Adapter.UpdateUser(message.From.ID, *user); err != nil {
 		msg := tgbotapi.NewMessage(message.From.ID, "We experienced an issue updating address. Please contact customer support.")
@@ -174,8 +174,8 @@ func sendNoAnotherAddress(bot *tgbotapi.BotAPI, callbackQuery *tgbotapi.Callback
 		}
 		return
 	}
-	m := fmt.Sprintf("Your shipping address is:\nContinent:%s\nCountry:%s\nCity:%s\nEmail:%s\nPhone:%s\n", user.Continent, user.Country, user.City, user.City, user.Phone)
-	for i, address := range user.Addresses {
+	m := fmt.Sprintf("Your shipping address is:\nContinent:%s\nCountry:%s\nCity:%s\nEmail:%s\nPhone:%s\n", user.ShippingDetails.Continent, user.ShippingDetails.Country, user.ShippingDetails.City, user.ShippingDetails.City, user.ShippingDetails.Phone)
+	for i, address := range user.ShippingDetails.Addresses {
 		m = fmt.Sprintf("%sAddress %d: %s", m, i, address)
 	}
 	msg := tgbotapi.NewEditMessageText(callbackQuery.Message.Chat.ID, callbackQuery.Message.MessageID, m)
@@ -306,10 +306,10 @@ func handleSelectCountry(bot *tgbotapi.BotAPI, callbackQuery *tgbotapi.CallbackQ
 	if len(cities) > 30 {
 		rows = append(rows,
 			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("Next List", "next_list_30_"+selectedCountry)),
-			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("🔙 Back", "select_continent_"+user.Continent)))
+			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("🔙 Back", "select_continent_"+user.ShippingDetails.Continent)))
 	} else {
 		rows = append(rows,
-			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("🔙 Back", "select_continent_"+user.Continent)))
+			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("🔙 Back", "select_continent_"+user.ShippingDetails.Continent)))
 	}
 	keyboard := tgbotapi.NewInlineKeyboardMarkup(rows...)
 
@@ -360,11 +360,11 @@ func handleNextCityList(bot *tgbotapi.BotAPI, callbackQuery *tgbotapi.CallbackQu
 	if len(cities) > startIndex+30 {
 		rows = append(rows,
 			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("Prev List", fmt.Sprintf("prev_list_%d_%s", startIndex-30, selectedCountry)), tgbotapi.NewInlineKeyboardButtonData("Next List", fmt.Sprintf("next_list_%d_%s", startIndex+30, selectedCountry))),
-			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("🔙 Back", "select_continent_"+user.Continent)))
+			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("🔙 Back", "select_continent_"+user.ShippingDetails.Continent)))
 	} else {
 		rows = append(rows,
 			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("Prev List", fmt.Sprintf("prev_list_%d_%s", startIndex-30, selectedCountry))),
-			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("🔙 Back", "select_continent_"+user.Continent)))
+			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("🔙 Back", "select_continent_"+user.ShippingDetails.Continent)))
 	}
 	keyboard := tgbotapi.NewInlineKeyboardMarkup(rows...)
 
@@ -410,11 +410,11 @@ func handlePrevCityList(bot *tgbotapi.BotAPI, callbackQuery *tgbotapi.CallbackQu
 	if startIndex > 0 {
 		rows = append(rows,
 			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("Prev List", fmt.Sprintf("prev_list_%d_%s", startIndex-30, selectedCountry)), tgbotapi.NewInlineKeyboardButtonData("Next List", fmt.Sprintf("next_list_%d_%s", startIndex+30, selectedCountry))),
-			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("🔙 Back", "select_continent_"+user.Continent)))
+			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("🔙 Back", "select_continent_"+user.ShippingDetails.Continent)))
 	} else {
 		rows = append(rows,
 			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("Next List", fmt.Sprintf("next_list_%d_%s", startIndex+30, selectedCountry))),
-			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("🔙 Back", "select_continent_"+user.Continent)))
+			tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("🔙 Back", "select_continent_"+user.ShippingDetails.Continent)))
 	}
 	keyboard := tgbotapi.NewInlineKeyboardMarkup(rows...)
 
@@ -462,7 +462,7 @@ func handleSelectCountryOrder(bot *tgbotapi.BotAPI, callbackQuery *tgbotapi.Call
 	if len(row) > 0 {
 		rows = append(rows, tgbotapi.NewInlineKeyboardRow(row...))
 	}
-	rows = append(rows, tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("🔙 Back", "select_continent_order_"+user.Continent)))
+	rows = append(rows, tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData("🔙 Back", "select_continent_order_"+user.ShippingDetails.Continent)))
 	keyboard := tgbotapi.NewInlineKeyboardMarkup(rows...)
 
 	msg := tgbotapi.NewEditMessageTextAndMarkup(callbackQuery.Message.Chat.ID, callbackQuery.Message.MessageID, "Please select your city", keyboard)

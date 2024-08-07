@@ -5,7 +5,41 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <script>
+      window.addEventListener('DOMContentLoaded', (event) => {
+        Telegram.WebApp.ready();
+        
+        const user = Telegram.WebApp.initDataUnsafe.user;
+        
+        if (user) {
+          console.log('User ID:', user.id);
+          console.log('First Name:', user.first_name);
+          console.log('Last Name:', user.last_name);
+          console.log('Username:', user.username);
+          console.log('Language Code:', user.language_code);
+  
+          // Send user information to backend
+          fetch(window.location.origin + '/api/v1/userinfo', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+          })
+          .then(response => response.json())
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
+        } else {
+          console.log('No user information available.');
+        }
+      });
+    </script>
   </head>
   <body>
     <noscript>

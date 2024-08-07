@@ -16,15 +16,15 @@ import (
 
 type (
 	User struct {
-		ID                int64  `bson:"id,,omitempty"`
-		UserName          string `bson:"username,omitempty"`
-		FirstName         string `bson:"firstname,omitempty"`
-		LastName          string `bson:"lastname,omitempty"`
-		PreferredLanguage `bson:"preferred_language,omitempty"`
-		ShippingDetails   `bson:"shipping_details,omitempty"`
-		Referee           string   `bson:"referee,omitempty"`
-		Referrals         []string `bson:"referrals,omitempty"`
-		ReferralCode      string   `bson:"referralcode,omitempty"`
+		ID                int64             `bson:"id,,omitempty"`
+		UserName          string            `bson:"username,omitempty"`
+		FirstName         string            `bson:"firstname,omitempty"`
+		LastName          string            `bson:"lastname,omitempty"`
+		PreferredLanguage PreferredLanguage `bson:"preferred_language,omitempty" json:"PreferredLanguage"`
+		ShippingDetails   ShippingDetails   `bson:"shipping_details,omitempty" json:"ShippingDetails"`
+		Referee           string            `bson:"referee,omitempty"`
+		Referrals         []string          `bson:"referrals,omitempty"`
+		ReferralCode      string            `bson:"referralcode,omitempty"`
 	}
 	Wallet struct {
 		Balance int64
@@ -63,7 +63,7 @@ type (
 		Amount        int64
 		To            string
 		From          any
-		TransactionID string `bson:"transaction_id"`
+		TransactionID string `bson:"transaction_id" json:"transaction_id"`
 	}
 	TransactionType int
 
@@ -100,6 +100,19 @@ type (
 		AppartmentNumber string   `bson:"an,omitempty"`
 		Addresses        []string `bson:"addresses,omitempty"`
 	}
+
+	ShippingAddress struct {
+		FirstName string `json:"firstName"`
+		LastName  string `json:"lastName"`
+		Address   string `json:"address"`
+		Address2  string `json:"address2"`
+		Email     string `json:"email"`
+		City      string `json:"city"`
+		Continent string `json:"continent"`
+		Zip       string `json:"zip"`
+		Country   string `json:"country"`
+		Phone     string `json:"phone"`
+	}
 )
 type SAT int
 
@@ -115,17 +128,17 @@ const (
 )
 
 func CheckSA(u User) SAT {
-	if u.Continent == "" {
+	if u.ShippingDetails.Continent == "" {
 		return Continent
-	} else if u.Country == "" {
+	} else if u.ShippingDetails.Country == "" {
 		return Country
-	} else if u.City == "" {
+	} else if u.ShippingDetails.City == "" {
 		return City
-	} else if u.Email == "" {
+	} else if u.ShippingDetails.Email == "" {
 		return Email
-	} else if u.Phone == "" {
+	} else if u.ShippingDetails.Phone == "" {
 		return Phone
-	} else if len(u.Addresses) == 0 {
+	} else if len(u.ShippingDetails.Addresses) == 0 {
 		return AN
 	} else {
 		return Done
@@ -149,9 +162,9 @@ var (
 		/*{Name: "中文（香港）", Code: "zh-HK", EnglishName: "Chinese (Hong Kong)"},
 		{Name: "中文（简体）", Code: "zh-CN", EnglishName: "Chinese (PRC)"},
 		{Name: "中文（繁體）", Code: "zh-TW", EnglishName: "Chinese (Taiwan)"},*/
-		{Name:"Chinese (Literary)", Code: "lzh", EnglishName: "Chinese (Literary)"},
-		{Name:"Chinese Simplified", Code: "zh-Hans", EnglishName: "Chinese Simplified"},
-		{Name:"Chinese Traditional", Code: "zh-Hant", EnglishName: "Chinese Traditional"},
+		{Name: "Chinese (Literary)", Code: "lzh", EnglishName: "Chinese (Literary)"},
+		{Name: "Chinese Simplified", Code: "zh-Hans", EnglishName: "Chinese Simplified"},
+		{Name: "Chinese Traditional", Code: "zh-Hant", EnglishName: "Chinese Traditional"},
 
 		{Name: "Hrvatski", Code: "hr", EnglishName: "Croatian"},
 		{Name: "Čeština", Code: "cs", EnglishName: "Czech"},
@@ -159,7 +172,7 @@ var (
 		{Name: "Nederlands", Code: "nl", EnglishName: "Dutch"},
 		/*{Name: "English (UK)", Code: "en-GB", EnglishName: "English (UK)"},
 		{Name: "English (US)", Code: "en-US", EnglishName: "English (US)"},*/
-		{Name:"English", Code: "en", EnglishName: "English"},
+		{Name: "English", Code: "en", EnglishName: "English"},
 
 		{Name: "Eesti", Code: "et", EnglishName: "Estonian"},
 		{Name: "Filipino", Code: "fil", EnglishName: "Filipino"},

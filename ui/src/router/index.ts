@@ -29,6 +29,46 @@ const routes: Array<RouteRecordRaw> = [
       import(/* webpackChunkName: "account" */ "../views/AccountComponent.vue"),
   },
   {
+    path: "/orders",
+    name: "orders",
+    component: () =>
+      import(/* webpackChunkName: "orders" */ "../views/OrdersComponent.vue"),
+  },
+  {
+    path: "/transactions",
+    name: "transactions",
+    component: () =>
+      import(
+        /* webpackChunkName: "transactions" */ "../views/TransactionsComponent.vue"
+      ),
+  },
+  {
+    path: "/refferal",
+    name: "refferal",
+    component: () =>
+      import(
+        /* webpackChunkName: "refferal" */ "../views/RefferalComponent.vue"
+      ),
+  },
+  {
+    path: "/support",
+    name: "support",
+    component: () =>
+      import(/* webpackChunkName: "support" */ "../views/SupportComponent.vue"),
+  },
+  {
+    path: "/account_info",
+    name: "account_info",
+    component: () =>
+      import(/* webpackChunkName: "account_info" */ "../views/AccountInfo.vue"),
+  },
+  {
+    path: "/wallet",
+    name: "wallet",
+    component: () =>
+      import(/* webpackChunkName: "wallet" */ "../views/WalletInfo.vue"),
+  },
+  {
     path: "/settings",
     name: "settings",
     component: () =>
@@ -38,6 +78,15 @@ const routes: Array<RouteRecordRaw> = [
     path: "/:pathMatch(.*)*",
     name: "NotFound",
     component: () => import("@/views/NotFound.vue"),
+  },
+  {
+    path: "/orders/:id",
+    name: "order-details",
+    component: () =>
+      import(
+        /* webpackChunkName: "order-details" */ "../views/OrderDetails.vue"
+      ),
+    props: true, // This allows route params to be passed as props
   },
 ];
 

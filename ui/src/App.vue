@@ -1,11 +1,15 @@
 <template>
-  <!--nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav-->
+  <notifications position="middle right" />
   <router-view />
 </template>
+<script setup>
+import { provide } from "vue";
+import { useDialog } from "./store/state";
 
+const dialog = useDialog();
+
+provide("dialog", dialog);
+</script>
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -13,6 +17,7 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  background-color: white;
 }
 
 nav {
@@ -35,6 +40,7 @@ html {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: white;
 }
 .active {
   background-color: #42b983;

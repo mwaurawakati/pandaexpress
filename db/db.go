@@ -486,3 +486,52 @@ func (a *adapter)GetTotalRefferalsEarning(refID string) (float64, error) {
 
 	return 0, nil
 }
+
+// GetTransactions retrieves transactions from MongoDB with pagination
+func (a *adapter) GetTransactions(userID int64, num int, offset int) ([]models.Transaction, error) {
+	collection := a.db.Collection("transactions")
+
+	filter := bson.M{
+		"$or": []bson.M{
+			{"to": userID},
+			{"from": userID},
+		},
+	}
+	opts := options.Find().SetLimit(int64(num)).SetSkip(int64(offset))
+
+	cursor, err := collection.Find(context.TODO(), filter, opts)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.TODO())
+
+	var transactions []models.Transaction
+	if err = cursor.All(context.TODO(), &transactions); err != nil {
+		return nil, err
+	}
+
+	return transactions, nil
+}
+
+// GetTransactions retrieves transactions from MongoDB with pagination
+func (a *adapter) GetOrders(userID int64, num int, offset int) ([]models.Order, error) {
+	collection := a.db.Collection("orders")
+
+	filter := bson.M{
+		"userid": userID,
+	}
+	opts := options.Find().SetLimit(int64(num)).SetSkip(int64(offset))
+
+	cursor, err := collection.Find(context.TODO(), filter, opts)
+	if err != nil {
+		return nil, err
+	}
+	defer cursor.Close(context.TODO())
+
+	var transactions []models.Order
+	if err = cursor.All(context.TODO(), &transactions); err != nil {
+		return nil, err
+	}
+
+	return transactions, nil
+}

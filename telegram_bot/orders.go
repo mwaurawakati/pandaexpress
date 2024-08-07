@@ -18,24 +18,24 @@ import (
 func AddCartKeyboard(bot *tgbotapi.BotAPI, chatID int64) int {
 	cartButton := tgbotapi.NewKeyboardButton("🛒 Cart")
 	checkoutButton := tgbotapi.NewKeyboardButton("♻️ Checkout ✅")
-	clearButton := tgbotapi.NewKeyboardButton("⭕ Clear Cart ❌")
+	//clearButton := tgbotapi.NewKeyboardButton("⭕ Clear Cart ❌")
 	transactionsButton := tgbotapi.NewKeyboardButton("♐ Transactions ♐")
 	ordersButton := tgbotapi.NewKeyboardButton("🔰 Orders 🔰")
 	refferals := tgbotapi.NewKeyboardButton("🌐 Refferals 🌐")
 	checkButton := tgbotapi.NewInlineKeyboardButtonData("♻️ Checkout ✅", "♻️ Checkout ✅")
-	cButton := tgbotapi.NewInlineKeyboardButtonData("🛒 Cart", "🛒 Cart")
+	//cButton := tgbotapi.NewInlineKeyboardButtonData("🛒 Cart", "🛒 Cart")
 	// Create reply keyboard markup
 	replyKeyboard := tgbotapi.NewReplyKeyboard(
 		tgbotapi.NewKeyboardButtonRow(cartButton, checkoutButton),
-		tgbotapi.NewKeyboardButtonRow(clearButton),
+		//tgbotapi.NewKeyboardButtonRow(clearButton),
 		tgbotapi.NewKeyboardButtonRow(transactionsButton, ordersButton),
 		tgbotapi.NewKeyboardButtonRow(refferals),
 	)
 	inlineKeyboard := tgbotapi.NewInlineKeyboardMarkup(
-		tgbotapi.NewInlineKeyboardRow(checkButton, cButton),
+		tgbotapi.NewInlineKeyboardRow(checkButton),
 	)
 	// Send message to update the reply keyboard
-	replyMsg := tgbotapi.NewMessage(chatID, "You have items in the Cart. Click \n 🛒 Cart to view \n ♻️ Checkout ✅ to place an order")
+	replyMsg := tgbotapi.NewMessage(chatID, "You have items in the Cart. \n ♻️ Checkout ✅ to place an order")
 	replyMsg.ReplyMarkup = struct {
 		tgbotapi.InlineKeyboardMarkup
 		tgbotapi.ReplyKeyboardMarkup
@@ -170,7 +170,7 @@ func handleOrder(bot *tgbotapi.BotAPI, callbackQuery *tgbotapi.CallbackQuery) {
 	//order.TransactionID = transaction.TransactionID
 	// Create a shipping transaction
 	// get shipping fee
-	shippingfee, err := getShippingPrice(settings, user.Country, user.City)
+	shippingfee, err := getShippingPrice(settings, user.ShippingDetails.Country, user.ShippingDetails.City)
 	if err != nil {
 		slog.Info("error getting shipping fee")
 		newCaption := "We were unable to process your order. Please retry or reach out to support"

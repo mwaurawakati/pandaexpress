@@ -9,45 +9,40 @@
       <div style="flex-grow: 1" class="my-4">
         <div
           class="shadow-1xl h-16 m-2 rounded bg-slate-300 flex flex-col"
-          @click="open = true"
+          @click="sl.openDialog"
         >
           <span class="font-bold text-2xl">Language</span>
           <span>Set preffered language</span>
         </div>
-        <div class="shadow-1xl h-16 m-2 rounded bg-slate-300 flex flex-col">
+        <div
+          class="shadow-1xl h-16 m-2 rounded bg-slate-300 flex flex-col"
+          @click="sa.openDialog"
+        >
           <span class="font-bold text-2xl">Shipping Address</span>
           <span>Set shipping Address</span>
         </div>
       </div>
     </div>
-    <SetShippingAddress
-      :open="isDialogOpen"
-      @update:open="isDialogOpen = $event"
-    />
+    <SetShippingAddress />
+    <SetLanguage />
   </div>
   <NavComponent />
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { PhotoIcon, UserCircleIcon } from "@heroicons/vue/24/solid";
 import NavComponent from "./NavComponent.vue";
-import TestC from "./TestC.vue";
 import SetShippingAddress from "./SetShippingAddress.vue";
-import {
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-  TransitionChild,
-  TransitionRoot,
-} from "@headlessui/vue";
+import { useSAStore, useLanguageStore } from "../store/dstore";
+import SetLanguage from "./SetLanguage.vue";
 @Options({
   components: {
     NavComponent,
-    TestC,
     SetShippingAddress,
+    SetLanguage,
   },
 })
 export default class SettingsView extends Vue {
-  open = false;
+  sa = useSAStore();
+  sl = useLanguageStore();
 }
 </script>
